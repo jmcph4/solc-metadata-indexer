@@ -22,6 +22,9 @@ const CBOR_METADATA_LENGTH_LEN: usize = 2;
  * */
 struct CanonicalMetadata<'a> {
     pub ipfs: Option<&'a [u8]>,
+    bzzr0: Option<&'a [u8]>,
+    bzzr1: Option<&'a [u8]>,
+    pub experimental: Option<bool>,
     _solc: Option<&'a [u8]>,
 }
 
@@ -92,7 +95,7 @@ fn grab_ipfs_digest(data: &[u8]) -> Option<Vec<u8>> {
 
 #[inline]
 fn grab_swarm_digest(data: &[u8]) -> Option<Vec<u8>> {
-    todo!()
+    None
 }
 
 #[inline]
@@ -111,6 +114,8 @@ struct Opts {
     pub live: bool,
     #[clap(short = 'i', long, action)]
     pub hex: bool,
+    #[clap(short, long, action)]
+    pub metadata: bool,
 }
 
 fn main() -> eyre::Result<()> {
@@ -134,6 +139,10 @@ fn main() -> eyre::Result<()> {
             None => return Err(eyre!("No CBOR data present")),
         };
         assert!(cbor_data.len() == cbor_metadata_length(&bytes).unwrap());
+
+        if opts.metadata {
+            println!("{:#?}", grab_canonical_metadata(&bytes));
+        }
 
         if let Some(digest) = grab_digest(&bytes) {
             println!("{digest}");
