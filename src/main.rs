@@ -1,6 +1,7 @@
 use std::{
-    fmt,
+    fmt, fs,
     io::{self, BufRead, Read, stdin},
+    path::PathBuf,
 };
 
 use clap::Parser;
@@ -24,7 +25,7 @@ struct CanonicalMetadata<'a> {
     pub ipfs: Option<&'a [u8]>,
     bzzr0: Option<&'a [u8]>,
     bzzr1: Option<&'a [u8]>,
-    pub experimental: Option<bool>,
+    _experimental: Option<bool>,
     _solc: Option<&'a [u8]>,
 }
 
@@ -95,7 +96,15 @@ fn grab_ipfs_digest(data: &[u8]) -> Option<Vec<u8>> {
 
 #[inline]
 fn grab_swarm_digest(data: &[u8]) -> Option<Vec<u8>> {
-    None
+    let meta = grab_canonical_metadata(data)?;
+
+    /* always prefer the most recent Swarm version */
+    match (meta.bzzr0, meta.bzzr1) {
+        (Some(_), Some(b)) => Some(b.to_vec()),
+        (Some(a), None) => Some(a.to_vec()),
+        (None, Some(b)) => Some(b.to_vec()),
+        (None, None) => None,
+    }
 }
 
 #[inline]
@@ -112,10 +121,12 @@ fn grab_digest(data: &[u8]) -> Option<Digest> {
 struct Opts {
     #[clap(short, long, action)]
     pub live: bool,
-    #[clap(short = 'i', long, action)]
-    pub hex: bool,
+    #[clap(short, long, action)]
+    pub raw: bool,
     #[clap(short, long, action)]
     pub metadata: bool,
+    #[clap(short, long)]
+    pub bytecode: Option<PathBuf>,
 }
 
 fn main() -> eyre::Result<()> {
@@ -124,15 +135,22 @@ fn main() -> eyre::Result<()> {
     if opts.live {
         todo!()
     } else {
-        let bytes = if opts.hex {
+        let bytes = if let Some(path) = opts.bytecode {
+            if opts.raw {
+                fs::read(path)?
+            } else {
+                let s = fs::read_to_string(path)?;
+                hex::decode(&s[2..])?
+            }
+        } else if opts.raw {
+            let mut buf = Vec::new();
+            io::stdin().lock().read_to_end(&mut buf)?;
+            buf
+        } else {
             let mut line = String::new();
             stdin().lock().read_line(&mut line)?;
             let line = line.trim_end();
             hex::decode(line[2..].trim_end())?
-        } else {
-            let mut buf = Vec::new();
-            io::stdin().lock().read_to_end(&mut buf)?;
-            buf
         };
         let cbor_data = match grab_cbor_data(&bytes) {
             Some(t) => t,
