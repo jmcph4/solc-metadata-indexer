@@ -7,8 +7,17 @@ edition = "2024"
 bs58 = "0.5.1"
 clap = { version = "4.5.31", features = ["derive"] }
 eyre = "0.6.12"
+futures = "0.3.31"
 hex = "0.4.3"
 multihash = "0.19.3"
 serde = { version = "1.0.218", features = ["derive"] }
 serde_cbor = "0.11.2"
 serde_with = "3.12.0"
+
+reth = { git = "https://github.com/paradigmxyz/reth", tag = "v1.2.2" }
+reth-exex = { git = "https://github.com/paradigmxyz/reth", tag = "v1.2.2" }
+reth-node-api = { git = "https://github.com/paradigmxyz/reth", tag = "v1.2.2" }
+reth-node-ethereum = { git = "https://github.com/paradigmxyz/reth", tag = "v1.2.2" }
+reth-tracing = { git = "https://github.com/paradigmxyz/reth", tag = "v1.2.2" }
+reth-execution-types = { git = "https://github.com/paradigmxyz/reth", tag = "v1.2.2" }
+tokio = { version = "1.44.0", features = ["macros"] }
