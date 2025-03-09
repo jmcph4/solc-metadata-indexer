@@ -11,6 +11,7 @@ use serde_cbor::from_slice;
 use serde_with::{serde_as, skip_serializing_none};
 
 use futures::{Future, TryStreamExt};
+use reth::{primitives::Recovered, rpc::types::TransactionTrait};
 use reth_exex::{ExExContext, ExExEvent, ExExNotification};
 use reth_node_api::FullNodeComponents;
 use reth_node_ethereum::EthereumNode;
@@ -144,6 +145,17 @@ async fn exex<Node: FullNodeComponents>(
         match &notification {
             ExExNotification::ChainCommitted { new } => {
                 info!(committed_chain = ?new.range(), "Received commit");
+                let latest_block = new.tip().clone();
+                let latest_txs: Vec<Recovered<_>> =
+                    latest_block.into_transactions_recovered().collect();
+                latest_txs
+                    .iter()
+                    .filter(|tx| tx.to().is_none())
+                    .map(|tx| tx.input())
+                    .map(|data| grab_digest(data))
+                    .for_each(|digest| {
+                        println!("{digest:?}");
+                    });
             }
             ExExNotification::ChainReorged { old, new } => {
                 info!(from_chain = ?old.range(), to_chain = ?new.range(), "Received reorg");
@@ -167,7 +179,7 @@ async fn start_exex() -> eyre::Result<()> {
     reth::cli::Cli::parse_args().run(|builder, _| async move {
         let handle = builder
             .node(EthereumNode::default())
-            .install_exex("Minimal", exex_init)
+            .install_exex("Solidity Metadata Indexer", exex_init)
             .launch()
             .await?;
 
