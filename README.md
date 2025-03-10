@@ -20,3 +20,17 @@ So to retrieve the CBOR data we need to walk backwards from the end of the entir
 
 ## Usage ##
 
+```
+Extracts Solidity metadata from contract bytecode
+
+Usage: solc-metadata-indexer [OPTIONS]
+
+Options:
+  -l, --live                 Activates and installs the ExEx into a running Reth instance
+  -r, --raw                  Interpret input from standard input as literal bytes
+  -m, --metadata             Print metadata representation to standard output
+  -b, --bytecode <BYTECODE>  Provide file path to a file containing bytecode (interpretation depends on `--raw`)
+  -h, --help                 Print help
+  -V, --version              Print version
+```
+
