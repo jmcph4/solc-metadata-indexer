@@ -8686,7 +8686,6 @@ dependencies = [
  "serde",
  "serde_cbor",
  "serde_with",
- "tokio",
 ]
 
 [[package]]

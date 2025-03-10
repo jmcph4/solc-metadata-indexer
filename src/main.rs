@@ -175,16 +175,18 @@ async fn exex<Node: FullNodeComponents>(
     Ok(())
 }
 
-async fn start_exex() -> eyre::Result<()> {
-    reth::cli::Cli::parse_args().run(|builder, _| async move {
-        let handle = builder
-            .node(EthereumNode::default())
-            .install_exex("Solidity Metadata Indexer", exex_init)
-            .launch()
-            .await?;
+fn start_exex() -> eyre::Result<()> {
+    reth::cli::Cli::try_parse_args_from(["reth", "node"])?.run(
+        |builder, _| async move {
+            let handle = builder
+                .node(EthereumNode::default())
+                .install_exex("Solidity Metadata Indexer", exex_init)
+                .launch()
+                .await?;
 
-        handle.wait_for_node_exit().await
-    })
+            handle.wait_for_node_exit().await
+        },
+    )
 }
 
 #[derive(Clone, Debug, Parser)]
@@ -199,12 +201,11 @@ struct Opts {
     pub bytecode: Option<PathBuf>,
 }
 
-#[tokio::main]
-async fn main() -> eyre::Result<()> {
+fn main() -> eyre::Result<()> {
     let opts = Opts::parse();
 
     if opts.live {
-        start_exex().await?;
+        start_exex()?;
     } else {
         let bytes = if let Some(path) = opts.bytecode {
             if opts.raw {
