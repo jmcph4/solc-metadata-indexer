@@ -189,14 +189,20 @@ fn start_exex() -> eyre::Result<()> {
     )
 }
 
+/// Extracts Solidity metadata from contract bytecode
 #[derive(Clone, Debug, Parser)]
+#[clap(version, about, author)]
 struct Opts {
+    /// Activates and installs the ExEx into a running Reth instance
     #[clap(short, long, action)]
     pub live: bool,
+    /// Interpret input from standard input as literal bytes
     #[clap(short, long, action)]
     pub raw: bool,
+    /// Print metadata representation to standard output
     #[clap(short, long, action)]
     pub metadata: bool,
+    /// Provide file path to a file containing bytecode (interpretation depends on `--raw`)
     #[clap(short, long)]
     pub bytecode: Option<PathBuf>,
 }
