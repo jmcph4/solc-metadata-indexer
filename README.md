@@ -9,14 +9,15 @@ By default, the [Solidity reference implementation](https://github.com/ethereum/
 The actual encoding itself is somewhat ad hoc. The length of the CBOR bytes is encoded in the *final two octets* of the entire bytecode sequence.
 
 ```
-+-----------~~~-----------+-----------------------+---------------------------------------+
+0                         m                      N-2                                      N
++~~~~~~~~~~~~~~~~~~~~~~~~~+~~~~~~~~~~~~~~~~~~~~~~~+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 |                         |                       |                                       |
-| rest of the bytecode... | CBOR-encoded metadata | Length of CBOR-encoded data (2 bytes) |∅
+| rest of the bytecode... | CBOR-encoded metadata | Length of CBOR-encoded data (2 bytes) |
 |                         |                       |                                       |
 +-----------~~~-----------+-----------------------+---------------------------------------+
 ```
 
-So to retrieve the CBOR data we need to walk backwards from the end of the entire bytecode sequence by $n-2$ bytes and then read the following $n$ bytes.
+Suppose that the entire bytecode sequence is $N>2$ bytes long and that the final two bytes in the sequence (i.e., the length of the CBOR data) encode the number $m$. In order to retrieve the CBOR data we need to walk backwards from the end of the entire bytecode sequence by $m-2$ bytes and then read the following $m$ bytes.
 
 ## Usage ##
 
