@@ -37,3 +37,11 @@ Options:
   -V, --version              Print version
 ```
 
+## Resources ##
+
+ - The [docs](https://docs.soliditylang.org/en/v0.8.28/metadata.html) for Solidity that describe contract metadata
+ - The [code](https://github.com/ethereum/solidity/blob/7893614a31fbeacd1966994e310ed4f760772658/libsolutil/IpfsHash.cpp) in `solc` that handles the metadata hashing for IPFS
+ - The [code](https://github.com/ipfs/kubo/blob/ad1868a424dd7a564ab3c023f4d35a2e6fd696aa/core/commands/add.go) for the `ipfs add` command (now a part of [Kubo](https://docs.ipfs.tech/install/command-line))
+ - The aformentioned [tool](https://playground.sourcify.dev) by Sourcify for exploring contract metadata
+ - The [CBOR playground](https://cbor.me)
+
