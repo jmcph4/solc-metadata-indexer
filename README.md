@@ -9,7 +9,7 @@ By default, the [Solidity reference implementation](https://github.com/ethereum/
 The actual encoding itself is somewhat ad hoc. The length of the CBOR bytes is encoded in the *final two octets* of the entire bytecode sequence.
 
 ```
-0                         m                      N-2                                      N
+0                        N-m                     N-2                                      N
 +~~~~~~~~~~~~~~~~~~~~~~~~~+~~~~~~~~~~~~~~~~~~~~~~~+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 |                         |                       |                                       |
 | rest of the bytecode... | CBOR-encoded metadata | Length of CBOR-encoded data (2 bytes) |
