@@ -39,6 +39,7 @@ Options:
 
 ## Resources ##
 
+ - The [Jetkit](https://github.com/jmcph4/jetkit) implementation (called [`sme`](https://github.com/jmcph4/jetkit/blob/master/src/sme/README.md))
  - The [docs](https://docs.soliditylang.org/en/v0.8.28/metadata.html) for Solidity that describe contract metadata
  - The [code](https://github.com/ethereum/solidity/blob/7893614a31fbeacd1966994e310ed4f760772658/libsolutil/IpfsHash.cpp) in `solc` that handles the metadata hashing for IPFS
  - The [code](https://github.com/ipfs/kubo/blob/ad1868a424dd7a564ab3c023f4d35a2e6fd696aa/core/commands/add.go) for the `ipfs add` command (now a part of [Kubo](https://docs.ipfs.tech/install/command-line))
