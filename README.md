@@ -2,7 +2,7 @@
 
 An [ExEx](https://www.paradigm.xyz/2024/05/reth-exex) that indexes smart contract [metadata](https://docs.soliditylang.org/en/latest/metadata.html) produced by the Solidity compiler, `solc`.
 
-**[Follow me on X, the everything app](https://x.com/secjack_) or even [read my blog](https://jmcph4.dev/posts)**.
+**[Follow me on X, the everything app](https://x.com/secjack_) or even [read my blog](https://jmcph4.dev/posts/decoding-solidity-metadata.html)**.
 
 ## Background ##
 
